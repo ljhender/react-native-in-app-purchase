@@ -21,10 +21,9 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.LifecycleEventListener;
 
-import com.facebook.react.bridge.NativeModule;
-import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ActivityEventListener;
+
+import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactContext;
 
 import org.json.JSONException;
@@ -147,7 +146,7 @@ public class InAppPurchaseModule extends ReactContextBaseJavaModule implements L
     @Override
     public void onHostResume() {
         if(!init) {
-            mActivityContext = this.getCurrentActivity();
+            mActivityContext = getCurrentActivity();
 
             Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
 
