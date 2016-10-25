@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class InAppPurchaseModule extends ReactContextBaseJavaModule {
+public class InAppPurchaseModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
 
     private static final int REQUEST_CODE_PURCHASE = 149455;
 
@@ -107,6 +107,7 @@ public class InAppPurchaseModule extends ReactContextBaseJavaModule {
     private Purchase pendingPurchase;
     private Context mActivityContext;
     private IInAppBillingService mService;
+    private boolean init = false;
 
     // Establish a connection with Billing Service on Google Play
     private ServiceConnection mServiceConn = new ServiceConnection() {
@@ -121,16 +122,38 @@ public class InAppPurchaseModule extends ReactContextBaseJavaModule {
         }
     };
 
-    public InAppPurchaseModule(ReactApplicationContext reactContext, Context activityContext) {
+    // public InAppPurchaseModule(ReactApplicationContext reactContext, Context activityContext) {
+    public InAppPurchaseModule(ReactApplicationContext reactContext) {
         super(reactContext);
 
-        mActivityContext = activityContext;
+        reactContext.addLifecycleEventListener(this);
 
-        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+        // mActivityContext = activityContext;
 
-        // Explicitly set the intent's target package name to protect the security of billing transactions
-        serviceIntent.setPackage("com.android.vending");
-        activityContext.bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+        // Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+
+        // // Explicitly set the intent's target package name to protect the security of billing transactions
+        // serviceIntent.setPackage("com.android.vending");
+        // activityContext.bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+    }
+    // Lifecycle changes
+    @Override
+    public void onHostResume() {
+        if(!init) {
+            mActivityContext = getCurrentActivity();
+
+            Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+
+            // Explicitly set the intent's target package name to protect the security of billing transactions
+            serviceIntent.setPackage("com.android.vending");
+            activityContext.bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+        }
+    }
+    @Override
+    public void onHostPause() {
+    }
+    @Override
+    public void onHostDestroy() {
     }
 
     @Override
