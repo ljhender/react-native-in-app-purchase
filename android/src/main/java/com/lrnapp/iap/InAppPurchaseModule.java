@@ -147,7 +147,7 @@ public class InAppPurchaseModule extends ReactContextBaseJavaModule implements L
     @Override
     public void onHostResume() {
         if(!init) {
-            mActivityContext = getCurrentActivity();
+            mActivityContext = this.getCurrentActivity();
 
             Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
 
