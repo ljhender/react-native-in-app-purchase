@@ -24,7 +24,7 @@ public class InAppPurchasePackage implements ReactPackage {
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-        mModuleInstance = new InAppPurchaseModule(reactContext, mActivityContext);
+        mModuleInstance = new InAppPurchaseModule(reactContext);
 
         return Arrays.<NativeModule>asList(mModuleInstance);
     }
